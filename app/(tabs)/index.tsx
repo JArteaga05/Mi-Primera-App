@@ -23,6 +23,18 @@ export default function HomeScreen() {
         </ThemedText>
         <HelloWave />
       </ThemedView>
+
+      <ThemedView style={styles.descriptionContainer}>
+        <ThemedText style={styles.description}>
+          Algo nuevo está llegando. Esta app será tu espacio para descubrir
+          funciones innovadoras y una experiencia diferente. 🚀
+        </ThemedText>
+        <ThemedView style={styles.badge}>
+          <ThemedText style={styles.badgeText}>
+            ✦ Próximamente más novedades
+          </ThemedText>
+        </ThemedView>
+      </ThemedView>
     </ParallaxScrollView>
   );
 }
@@ -32,6 +44,27 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
+  },
+  descriptionContainer: {
+    marginTop: 8,
+    gap: 12,
+  },
+  description: {
+    fontSize: 14,
+    lineHeight: 22,
+    opacity: 0.7,
+  },
+  badge: {
+    alignSelf: "flex-start",
+    backgroundColor: "#e8f7fb",
+    paddingHorizontal: 12,
+    paddingVertical: 5,
+    borderRadius: 20,
+  },
+  badgeText: {
+    fontSize: 11,
+    fontWeight: "600",
+    color: "#1D3D47",
   },
   reactLogo: {
     height: 178,
