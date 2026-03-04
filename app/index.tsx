@@ -1,171 +1,433 @@
 import React, { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native"; //botonesmodernos, texto,contenedores, controles y estilos
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from "react-native";
 
-//componente
-function InfoRow({ label, value }: { label: string; value: string }) {
+// Separador visual
+function Divider() {
+  return <View style={styles.divisor} />;
+}
+
+//  Título de sección
+function Seccion({ icono, titulo }) {
   return (
-    <View style={styles.row}>
-      <Text style={styles.rowLabel}>{label}</Text>
-      <Text style={styles.rowValue}>{value}</Text>
+    <View style={styles.seccionHeader}>
+      <Text style={styles.seccionIcono}>{icono}</Text>
+      <Text style={styles.seccionTitulo}>{titulo}</Text>
+    </View>
+  );
+}
+
+// Badge / Chip
+function Badge({ texto }) {
+  return (
+    <View style={styles.badge}>
+      <Text style={styles.badgeText}>{texto}</Text>
+    </View>
+  );
+}
+
+// Botón reutilizable
+function Boton({ texto, onPress }) {
+  return (
+    <Pressable style={styles.boton} onPress={onPress}>
+      <Text style={styles.botonTexto}>{texto}</Text>
+    </Pressable>
+  );
+}
+
+// Campo de formulario
+function Campo({ label, placeholder, teclado = "default" }) {
+  return (
+    <View style={styles.campo}>
+      <Text style={styles.label}>{label}</Text>
+      <TextInput
+        placeholder={placeholder}
+        keyboardType={teclado}
+        placeholderTextColor="#8a8a8a"
+        style={styles.input}
+      />
+    </View>
+  );
+}
+
+// Tarjeta informativa
+function Tarjeta({ icono, titulo, descripcion }) {
+  return (
+    <View style={styles.card}>
+      <Text style={styles.cardIcon}>{icono}</Text>
+      <View style={{ flex: 1 }}>
+        <Text style={styles.cardTitle}>{titulo}</Text>
+        <Text style={styles.cardText}>{descripcion}</Text>
+      </View>
+    </View>
+  );
+}
+
+// Mini tarjeta (solo UI)
+function MiniCard({ icono, titulo, valor }) {
+  return (
+    <View style={styles.miniCard}>
+      <Text style={styles.miniIcon}>{icono}</Text>
+      <Text style={styles.miniTitle}>{titulo}</Text>
+      <Text style={styles.miniValue}>{valor}</Text>
+    </View>
+  );
+}
+
+// Fila de resumen
+function Estadistica({ label, value }) {
+  return (
+    <View style={styles.statRow}>
+      <Text style={styles.statLabel}>{label}</Text>
+      <Text style={styles.statValue}>{value}</Text>
     </View>
   );
 }
 
 export default function App() {
-  //estado: lo que cambia en pantalla
-  const [estado, setEstado] = useState("Disponible"); //constantes
-  const [toques, setToques] = useState(0); //constantes
+  // ÚNICA funcionalidad permitida en este laboratorio
+  const [estado, setEstado] = useState("Disponible");
 
-  //funcion: lo que pasa la tocar el boton
-  const toggleEstado = () => {
-    setToques((t) => t + 1);
-    setEstado((prev) => (prev === "Disponible" ? "En clases" : "Disponible"));
+  const cambiarEstado = () => {
+    setEstado((prev) => (prev === "Disponible" ? "En clase 👩‍💻" : "Disponible"));
   };
 
   return (
-    //contenedor
-    <View style={styles.container}>
-      {/* HEADER */}
+    <ScrollView contentContainerStyle={styles.container}>
+      {/* HEADER PERFIL */}
       <View style={styles.header}>
-        <Text style={styles.title}>Perfil 6E</Text>
-        <Text style={styles.subtitle}>Desarrollo Móvil • React Native</Text>
+        <Image
+          source={require("../assets/images/information-technology-cyber-vision-systems-osb7da4h47w8pnbn.jpg")}
+          style={styles.foto}
+        />
+
+        <View style={styles.headerInfo}>
+          <Text style={styles.nombre}>Nombre Apellido</Text>
+          <Text style={styles.subtitulo}>Estudiante • React Native</Text>
+
+          <View style={styles.estadoRow}>
+            <Text style={styles.estadoLabel}>Estado:</Text>
+            <Text style={styles.estado}>{estado}</Text>
+          </View>
+
+          <Boton texto="Cambiar estado" onPress={cambiarEstado} />
+        </View>
       </View>
 
-      {/* TARJETA */}
-      <View style={styles.card}>
-        {/* Avatar */}
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>6E</Text>
-        </View>
+      {/* BADGES */}
+      <View style={styles.badgesContainer}>
+        <Badge texto="UI/UX" />
+        <Badge texto="Expo" />
+        <Badge texto="Componentes" />
+        <Badge texto="Mobile" />
+        <Badge texto="Diseño" />
+        <Badge texto="Estilos" />
+      </View>
 
-        <Text style={styles.name}>Estudiante</Text>
-        <Text style={styles.program}>Ingeniería de Sistemas</Text>
+      <Divider />
 
-        <View style={styles.divider} />
+      {/* FORMULARIO */}
+      <Seccion icono="📄" titulo="Datos del Perfil" />
 
-        <InfoRow label="Semestre" value="2026-A" />
-        <InfoRow label="Grupo" value="6E" />
-        <InfoRow label="Estado" value={estado} />
-        <InfoRow label="Toques" value={String(toques)} />
+      <Campo label="Nombre" placeholder="Ej: Andrea" />
+      <Campo label="Apellido" placeholder="Ej: Benavides" />
+      <Campo
+        label="Correo"
+        placeholder="Ej: correo@dominio.com"
+        teclado="email-address"
+      />
+      <Campo label="Ciudad" placeholder="Ej: Pasto" />
+      <Campo
+        label="Teléfono"
+        placeholder="Ej: 3001234567"
+        teclado="phone-pad"
+      />
+      <Campo label="Ocupación" placeholder="Ej: Estudiante / Desarrollador" />
 
-        {/* BOTÓN */}
-        <Pressable
-          onPress={toggleEstado}
-          style={({ pressed }) => [styles.btn, pressed && styles.btnPressed]}
-        >
-          <Text style={styles.btnText}>Cambiar estado</Text>
-        </Pressable>
+      <Divider />
 
-        {/* Mensaje dinámico */}
-        <Text style={styles.tip}>
-          Tip: cada toque cambia el estado y suma un contador.
+      {/* COMPONENTES EXTRA (UI) */}
+      <Seccion icono="🧩" titulo="Resumen Visual" />
+
+      <View style={styles.miniGrid}>
+        <MiniCard icono="📚" titulo="Curso" valor="Móvil" />
+        <MiniCard icono="⏳" titulo="Corte" valor="1" />
+        <MiniCard icono="✅" titulo="Avance" valor="UI" />
+      </View>
+
+      <View style={styles.statsBox}>
+        <Text style={styles.statsTitle}>Resumen rápido</Text>
+        <Estadistica label="Componentes usados" value="8+" />
+        <Estadistica label="Pantallas" value="1" />
+        <Estadistica label="Navegación" value="No" />
+      </View>
+
+      <Divider />
+
+      {/* TARJETAS */}
+      <Seccion icono="📌" titulo="Tarjetas Informativas" />
+
+      <Tarjeta
+        icono="⚙️"
+        titulo="Habilidad principal"
+        descripcion="Diseño de interfaces móviles limpias y organizadas."
+      />
+      <Tarjeta
+        icono="📱"
+        titulo="Proyecto actual"
+        descripcion="App tipo perfil usando componentes reutilizables."
+      />
+      <Tarjeta
+        icono="🚀"
+        titulo="Meta del curso"
+        descripcion="Aprender navegación, listas, formularios y consumo de API."
+      />
+
+      {/* FOOTER */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          ✅ Entrega: captura del emulador + link del repositorio (si aplica).
+        </Text>
+        <Text style={styles.footerWarn}>
+          📌 Base directa del parcial del próximo lunes.
         </Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
-const COLORS = {
-  bg: "#0B1220",
-  card: "#121B2E",
-  primary: "#5B8CFF",
-  text: "#EAF0FF",
-  muted: "#AAB7D6",
-  line: "rgba(234,240,255,0.12)",
-  success: "#29D3A6",
-};
-
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: COLORS.bg,
     padding: 18,
-    justifyContent: "center",
+    backgroundColor: "#f4f5f7",
   },
+
   header: {
-    marginBottom: 16,
+    backgroundColor: "white",
+    borderRadius: 16,
+    padding: 14,
+    flexDirection: "row",
+    gap: 12,
+    elevation: 3,
   },
-  title: {
-    color: COLORS.text,
-    fontSize: 28,
-    fontWeight: "800",
-    letterSpacing: 0.2,
+
+  foto: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
   },
-  subtitle: {
-    marginTop: 4,
-    color: COLORS.muted,
-    fontSize: 14,
-  },
-  card: {
-    backgroundColor: COLORS.card,
-    borderRadius: 18,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: COLORS.line,
-  },
-  avatar: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: "rgba(91,140,255,0.18)",
-    alignItems: "center",
+
+  headerInfo: {
+    flex: 1,
     justifyContent: "center",
-    borderWidth: 1,
-    borderColor: "rgba(91,140,255,0.35)",
+  },
+
+  nombre: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+
+  subtitulo: {
+    color: "gray",
+    marginBottom: 6,
+  },
+
+  estadoRow: {
+    flexDirection: "row",
+    gap: 6,
+    alignItems: "center",
     marginBottom: 10,
   },
-  avatarText: {
-    color: COLORS.text,
-    fontWeight: "900",
-    fontSize: 18,
+
+  estadoLabel: {
+    fontWeight: "bold",
   },
-  name: {
-    color: COLORS.text,
-    fontSize: 20,
-    fontWeight: "800",
+
+  estado: {
+    color: "#6b7280",
   },
-  program: {
-    color: COLORS.muted,
-    marginTop: 2,
+
+  boton: {
+    backgroundColor: "#111827",
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: "center",
   },
-  divider: {
+
+  botonTexto: {
+    color: "white",
+    fontWeight: "bold",
+  },
+
+  badgesContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 8,
+    marginTop: 12,
+  },
+
+  badge: {
+    backgroundColor: "white",
+    paddingVertical: 7,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    elevation: 2,
+  },
+
+  badgeText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "#111827",
+  },
+
+  divisor: {
     height: 1,
-    backgroundColor: COLORS.line,
-    marginVertical: 14,
+    backgroundColor: "#e5e7eb",
+    marginVertical: 16,
   },
-  row: {
+
+  seccionHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 10,
+  },
+
+  seccionIcono: {
+    fontSize: 16,
+  },
+
+  seccionTitulo: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+
+  campo: {
+    marginBottom: 12,
+  },
+
+  label: {
+    marginBottom: 6,
+    fontWeight: "600",
+    color: "#111827",
+  },
+
+  input: {
+    backgroundColor: "white",
+    borderRadius: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 12,
+    elevation: 2,
+  },
+
+  miniGrid: {
+    flexDirection: "row",
+    gap: 10,
+  },
+
+  miniCard: {
+    flex: 1,
+    backgroundColor: "white",
+    padding: 12,
+    borderRadius: 14,
+    elevation: 2,
+    alignItems: "center",
+  },
+
+  miniIcon: {
+    fontSize: 18,
+    marginBottom: 6,
+  },
+
+  miniTitle: {
+    fontSize: 12,
+    color: "gray",
+  },
+
+  miniValue: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginTop: 4,
+  },
+
+  statsBox: {
+    marginTop: 12,
+    backgroundColor: "white",
+    borderRadius: 14,
+    padding: 12,
+    elevation: 2,
+  },
+
+  statsTitle: {
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+
+  statRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f1f1",
   },
-  rowLabel: {
-    color: COLORS.muted,
-    fontSize: 14,
+
+  statLabel: {
+    color: "#111827",
+    fontWeight: "600",
   },
-  rowValue: {
-    color: COLORS.text,
-    fontSize: 14,
-    fontWeight: "700",
+
+  statValue: {
+    color: "gray",
   },
-  btn: {
-    marginTop: 14,
-    backgroundColor: COLORS.primary,
-    paddingVertical: 12,
-    borderRadius: 14,
+
+  card: {
+    flexDirection: "row",
+    gap: 12,
+    backgroundColor: "white",
+    padding: 14,
+    borderRadius: 16,
+    marginBottom: 10,
+    elevation: 3,
     alignItems: "center",
   },
-  btnPressed: {
-    opacity: 0.75,
-    transform: [{ scale: 0.99 }],
+
+  cardIcon: {
+    fontSize: 22,
   },
-  btnText: {
-    color: "#0B1220",
-    fontWeight: "900",
+
+  cardTitle: {
     fontSize: 15,
+    fontWeight: "bold",
   },
-  tip: {
-    marginTop: 10,
-    color: COLORS.muted,
+
+  cardText: {
+    color: "gray",
+    marginTop: 2,
+  },
+
+  footer: {
+    marginTop: 18,
+    padding: 12,
+    backgroundColor: "white",
+    borderRadius: 14,
+    elevation: 2,
+  },
+
+  footerText: {
+    color: "#111827",
+    fontSize: 13,
+  },
+
+  footerWarn: {
+    marginTop: 6,
+    color: "#6b7280",
     fontSize: 12,
   },
 });
