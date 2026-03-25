@@ -1,8 +1,7 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-const Stack = createNativeStackNavigator();
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -10,7 +9,6 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
   },
-
   titulo: {
     fontSize: 28,
     fontWeight: "bold",
@@ -18,7 +16,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
-
   card: {
     backgroundColor: "white",
     borderRadius: 16,
@@ -26,20 +23,17 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     elevation: 4,
   },
-
   nombre: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#111827",
     marginBottom: 8,
   },
-
   info: {
     fontSize: 15,
     color: "#4b5563",
     marginBottom: 4,
   },
-
   estado: {
     fontSize: 16,
     fontWeight: "600",
@@ -47,7 +41,6 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
   },
-
   botonPrincipal: {
     backgroundColor: "#111827",
     paddingVertical: 13,
@@ -62,7 +55,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
   },
-
   botonTexto: {
     color: "white",
     fontWeight: "bold",
@@ -70,64 +62,53 @@ const styles = StyleSheet.create({
   },
 });
 
-//componente reutikizable para mostrar la tarjeta de perfil
-function TarjetaPerfil(props) {
+function TarjetaPerfil({ nombre, ciudad, programa }) {
   return (
     <View style={styles.card}>
-      <Text style={styles.nombre}>{props.nombre}</Text>
-      <Text style={styles.info}>ciudad: {props.ciudad}</Text>
-      <Text style={styles.info}>programa: {props.programa}</Text>
+      <Text style={styles.nombre}>{nombre}</Text>
+      <Text style={styles.info}>ciudad: {ciudad}</Text>
+      <Text style={styles.info}>programa: {programa}</Text>
     </View>
   );
 }
 
-//pantalla de inicio donde se muestra la tarjeta de perfil y el estado actual, ademas de los botones para cambiar el estado y ver el detalle
-function inicioScreen({ navigation }) {
+export default function InicioScreen() {
+  const router = useRouter();
   const [estado, setEstado] = useState("Disponible");
+
   const cambiarEstado = () => {
     setEstado((prev) =>
       prev === "Disponible" ? "No Disponible" : "Disponible",
     );
   };
 
+  const handleVerDetalle = () => {
+    router.push({
+      pathname: "/detalle",
+      params: {
+        nombre: "Andrea Benavides",
+        ciudad: "Pasto",
+        programa: "Ingeniería de Sistemas",
+        estado,
+      },
+    });
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Perfil Académico</Text>
-
       <TarjetaPerfil
         nombre="Andrea Benavides"
         ciudad="Pasto"
         programa="Ingeniería de Sistemas"
       />
-
       <Text style={styles.estado}>Estado actual: {estado}</Text>
-
       <Pressable style={styles.botonSecundario} onPress={cambiarEstado}>
         <Text style={styles.botonTexto}>Cambiar estado</Text>
       </Pressable>
-
-      <Pressable
-        style={styles.botonPrincipal}
-        onPress={() =>
-          navigation.navigate("Detalle", {
-            nombre: "Andrea Benavides",
-            ciudad: "Pasto",
-            programa: "Ingeniería de Sistemas",
-            estado: estado,
-          })
-        }
-      >
+      <Pressable style={styles.botonPrincipal} onPress={handleVerDetalle}>
         <Text style={styles.botonTexto}>Ver detalle</Text>
       </Pressable>
-    </View>
-  );
-}
-//pantalla 2 donde se muestra el detalle del perfil academico, ademas del estado actual
-function detalleScreen({ route, navigation }) {
-  const { nombre, ciudad, programa, estado } = route.params;
-  return (
-    <View style={styles.container}>
-      <Text style={styles.nombre}>{nombre}</Text>
     </View>
   );
 }
