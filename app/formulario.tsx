@@ -1,18 +1,18 @@
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  ScrollView,
-  Pressable,
-  Switch,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  TextInput,
+  View,
 } from "react-native";
-import { useRouter } from "expo-router";
-import { supabase } from "./lib/supabase";
+import { supabase } from "../lib/supabase";
 
 // ── Tipos ──────────────────────────────────────────────────────────────────
 type Genero = "Masculino" | "Femenino" | "Otro" | "";
@@ -85,7 +85,9 @@ export default function FormularioEstudiante() {
     aceptarTerminos: false,
   });
 
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
+    {},
+  );
   const [cargando, setCargando] = useState(false);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
@@ -235,7 +237,9 @@ export default function FormularioEstudiante() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.titulo}>Nuevo Estudiante</Text>
-          <Text style={styles.subtitulo}>Completa los datos del formulario</Text>
+          <Text style={styles.subtitulo}>
+            Completa los datos del formulario
+          </Text>
         </View>
 
         {/* Sección: Datos personales */}
@@ -293,16 +297,26 @@ export default function FormularioEstudiante() {
               {generos.map((g) => (
                 <Pressable
                   key={g}
-                  style={[styles.generoBtn, form.genero === g && styles.generoBtnActivo]}
+                  style={[
+                    styles.generoBtn,
+                    form.genero === g && styles.generoBtnActivo,
+                  ]}
                   onPress={() => update("genero", g)}
                 >
-                  <Text style={[styles.generoBtnTxt, form.genero === g && styles.generoBtnTxtActivo]}>
+                  <Text
+                    style={[
+                      styles.generoBtnTxt,
+                      form.genero === g && styles.generoBtnTxtActivo,
+                    ]}
+                  >
                     {g}
                   </Text>
                 </Pressable>
               ))}
             </View>
-            {errors.genero && <Text style={styles.errorText}>{errors.genero}</Text>}
+            {errors.genero && (
+              <Text style={styles.errorText}>{errors.genero}</Text>
+            )}
           </View>
         </View>
 
@@ -355,7 +369,9 @@ export default function FormularioEstudiante() {
             trackColor={{ false: "#dde1e9", true: "#4f7ef8" }}
             thumbColor="#fff"
           />
-          <Text style={styles.terminosTxt}>Acepto los términos y condiciones</Text>
+          <Text style={styles.terminosTxt}>
+            Acepto los términos y condiciones
+          </Text>
         </View>
         {errors.aceptarTerminos && (
           <Text style={[styles.errorText, { marginLeft: 16, marginTop: -8 }]}>
@@ -366,7 +382,10 @@ export default function FormularioEstudiante() {
         {/* Botones */}
         <View style={styles.botones}>
           <Pressable
-            style={({ pressed }) => [styles.btnGuardar, pressed && { opacity: 0.85 }]}
+            style={({ pressed }) => [
+              styles.btnGuardar,
+              pressed && { opacity: 0.85 },
+            ]}
             onPress={handleSubmit}
             disabled={cargando}
           >
@@ -378,7 +397,10 @@ export default function FormularioEstudiante() {
           </Pressable>
 
           <Pressable
-            style={({ pressed }) => [styles.btnLimpiar, pressed && { opacity: 0.7 }]}
+            style={({ pressed }) => [
+              styles.btnLimpiar,
+              pressed && { opacity: 0.7 },
+            ]}
             onPress={resetForm}
             disabled={cargando}
           >
